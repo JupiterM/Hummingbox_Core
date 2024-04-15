@@ -1,0 +1,89 @@
+---
+- hosts: all
+  become: true
+
+  pre_tasks:
+    - name: Perform apt update
+      apt: update_cache=true
+
+    - name: Perform apt upgrade
+      apt: upgrade=yes
+
+    - name: Install Build-Essentials package.
+      apt:
+        name:
+          - build-essential
+          - wget
+          - git
+        state: present
+
+  tasks:    
+    - name: Get Mininconda Package.
+      get_url: 
+        url: https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+        dest: /tmp/Miniconda3-latest-Linux-x86_64.sh
+        mode: 0755
+ 
+    - name: Clone Hummingbot Repo.
+      git:
+        repo: https://github.com/hummingbot/hummingbot.git
+        dest: /vagrant/src/hummingbot
+        single_branch: yes
+        version: master
+      become_user: vagrant   
+    
+    - name: Install Miniconda.
+      shell: /tmp/Miniconda3-latest-Linux-x86_64.sh -b -u -p /opt/miniconda3
+
+    - name: Conda - set read permission for all
+      file:
+        path: /opt/miniconda3
+        mode: +r
+        recurse: yes
+    
+    - name: Conda - set execution permission for all
+      file:
+        path: /opt/miniconda3/bin
+        mode: +x
+        recurse: yes 
+    
+    - name: Initialize Conda (conda init)
+      shell: | 
+        /opt/miniconda3/bin/conda init
+        source /home/vagrant/.bashrc
+      args:
+        executable: /bin/bash
+      become_user: vagrant
+      
+    - name: Install Hummingbot Conda environment
+      shell: |
+        /opt/miniconda3/bin/conda run -n base "./install"
+      args:
+        chdir: /vagrant/src/hummingbot
+      become_user: vagrant
+
+    - name: Compile Hummingbot program
+      shell: | 
+        /opt/miniconda3/bin/conda run -n hummingbot "./compile"
+      args:
+        chdir: /vagrant/src/hummingbot
+      become_user: vagrant 
+    
+    - name: Renove Miniconda Installer.
+      file:
+        state: absent
+        path: /tmp/Miniconda3-latest-Linux-x86_64.sh
+
+    - name: VM setup and installation complete.
+      debug:
+        msg:
+        - "Congratulations! Hummingbox VM setup and installation is complete!"
+        - "Commands to access VM and start hummingbot"
+        - "       1: vagrant ssh"
+        - "       2: conda activate hummingbot"
+        - "       3: cd /vagrant/src/hummingbot"
+        - "       4: ./start"
+        - "To logout, type 'exit'"
+        - "Please note that everytime you log into this VM, you will have to activate the (hummingbot) environment."
+        - "To power off this VM, logout from it and type 'vagrant halt'."
+        - "Type 'vagrant global-status' to check status of VM."

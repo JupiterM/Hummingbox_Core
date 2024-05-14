@@ -5,7 +5,7 @@ This repo contains the files needed to set up a Vagrantbox which uses Ansible to
 
 ## Getting Started
 
-#### First- Vagrant needs to be installed on machine:\
+#### First- Vagrant needs to be installed on machine:
 https://developer.hashicorp.com/vagrant/docs/installation\
 
 ### Creating Vagrant box:

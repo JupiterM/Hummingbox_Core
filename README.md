@@ -1,4 +1,4 @@
-This repo contains the files needed to set up a Vagrantbox which uses Ansible to install Miniconda and Hummingbot.\
+This repo contains the files needed to set up a Vagrantbox which uses Ansible to install Miniconda and Hummingbot.
 
 
 **Getting Started**

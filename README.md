@@ -14,6 +14,6 @@ https://developer.hashicorp.com/vagrant/docs/installation\
   If for any reason installation is interrupted, running `Vagrant provision` will restart the process while skipping over the secions which have been completed.\
   Please note that this is not a virtual environment, but a completely separate virtual machine.\
   Hummingbot is installed into 'src' directory which is accessible on host machine.\
-  Vagrant automatically sets up networking in creation of VM, so there is nothing to do there.\
+  Vagrant automatically sets up networking in creation of VM, so there is nothing to do there.
   
 
